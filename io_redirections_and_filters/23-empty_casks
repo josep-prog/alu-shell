@@ -1,2 +1,2 @@
 #!/bin/bash
-awk -F: '{print $1 " : " $6}' /etc/passwd | sort
+find . -type f -empty -or -type d -empty -exec sh -c 'for f; do echo "${f##*/}"; done' sh {} +
