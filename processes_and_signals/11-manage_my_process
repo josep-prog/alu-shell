@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
 # This script manages the manage_my_process script.
+
 PIDFILE="/var/run/my_process.pid"
 
 start() {
@@ -46,3 +46,4 @@ case "$1" in
         echo "Usage: manage_my_process {start|stop|restart}"
         ;;
 esac
+
