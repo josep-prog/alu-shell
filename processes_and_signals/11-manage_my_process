@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # This script manages the manage_my_process script.
+# Script stops manage_my_process process when stopped.
+# Script deletes /var/run/my_process.pid file when stopped.
 
 PIDFILE="/var/run/my_process.pid"
 
@@ -46,4 +48,3 @@ case "$1" in
         echo "Usage: manage_my_process {start|stop|restart}"
         ;;
 esac
-
