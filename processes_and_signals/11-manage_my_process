@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # This script manages the manage_my_process script.
+# Script starts manage_my_process process when started.
 # Script stops manage_my_process process when stopped.
 # Script deletes /var/run/my_process.pid file when stopped.
 
@@ -24,7 +25,7 @@ stop() {
 
     # Get the PID from the PID file and kill the process
     kill "$(cat "$PIDFILE")"
-    rm "$PIDFILE"
+    rm "$PIDFILE"  # Deleting the PID file
     echo "manage_my_process stopped"
 }
 
