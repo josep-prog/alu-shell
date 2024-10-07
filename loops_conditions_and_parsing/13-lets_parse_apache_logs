@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# parses an Apache log file and displays the IP and HTTP code for each visitor.
+
+# Using cut to extract the first and ninth fields from the log file
+while read -r line; do
+    echo "$line" | cut -d ' ' -f 1,9
+done < apache-access.log
