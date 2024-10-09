@@ -42,7 +42,10 @@ restart() {
 
         rm "$PID_FILE"
         echo "manage_my_process stopped."
-    else
+
+	break
+
+	else
         echo "No PID file found. Process not running."
     fi
 
