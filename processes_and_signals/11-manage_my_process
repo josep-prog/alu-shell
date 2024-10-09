@@ -14,19 +14,27 @@ start() {
 stop() {
     if [ ! -f "$PID_FILE" ]; then
         echo "manage_my_process is not running."
-        exit 1
+        return 0  # Use return instead of exit to allow restart to proceed
     fi
-    kill "$(cat "$PID_FILE")"
-    rm "$PID_FILE"
-    echo "manage_my_process stopped"
+
+    # Read PID from the file
+    PID=$(cat "$PID_FILE")
+    if kill "$PID" > /dev/null 2>&1; then
+        rm -f "$PID_FILE"
+        echo "manage_my_process stopped"
+    else
+        echo "Failed to stop manage_my_process with PID $PID"
+    fi
 }
 
 restart() {
-    stop
-    start
+    stop  # Attempt to stop the process
+    sleep 1  # Optional: give it a moment to ensure the process has stopped
+    start  # Now try to start it again
     echo "manage_my_process restarted"
 }
 
+  
 case "$1" in
     start)
         start
