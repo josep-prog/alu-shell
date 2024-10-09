@@ -1,37 +1,7 @@
-#!/usr/bin/env bash
-# This script writes "I am alive!" to /tmp/my_process every 2 seconds.
-LOG_FILE="/tmp/my_process"
-PID_FILE="/var/run/my_process.pid"
+#!/bin/bash
 
-case "$1" in
-    start)
-        if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-            echo "manage_my_process is already running."
-            exit 1
-        fi
-
-        echo "manage_my_process started"
-        # Ensure the log file exists
-        touch "$LOG_FILE"
-
-        # Simulate process writing to the log
-        while true; do
-            echo "I am alive!" >> "$LOG_FILE"
-            sleep 2
-        done &
-        echo $! > "$PID_FILE" # Store the PID for later use
-        ;;
-    stop)
-        if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")"
-            rm "$PID_FILE"
-            echo "manage_my_process stopped"
-        else
-            echo "No process found"
-        fi
-        ;;
-    *)
-        echo "Usage: $0 {start|stop}"
-        exit 1
-        ;;
-esac
+# Infinite loop to write to /tmp/my_process
+while true; do
+    echo "I am alive!" >> /tmp/my_process
+    sleep 2
+done
