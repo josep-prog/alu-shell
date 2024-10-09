@@ -1,31 +1,23 @@
-#!/usr/bin/env bash
-# This script manages the manage_my_process script.
-# Script starts manage_my_process process when started.
-# Script stops manage_my_process process when stopped.
-# Script deletes /var/run/my_process.pid file when stopped.
+#!/bin/bash
 
-PIDFILE="/var/run/my_process.pid"
+PID_FILE="/var/run/my_process.pid"
 
 start() {
-    if [ -f "$PIDFILE" ]; then
+    if [ -f "$PID_FILE" ]; then
         echo "manage_my_process is already running."
         exit 1
     fi
-
-    # Start the process in the background
-    /path/to/manage_my_process & echo $! > "$PIDFILE"
+    nohup bash manage_my_process & echo $! > "$PID_FILE"
     echo "manage_my_process started"
 }
 
 stop() {
-    if [ ! -f "$PIDFILE" ]; then
+    if [ ! -f "$PID_FILE" ]; then
         echo "manage_my_process is not running."
         exit 1
     fi
-
-    # Get the PID from the PID file and kill the process
-    kill "$(cat "$PIDFILE")"
-    rm "$PIDFILE"  # Deleting the PID file
+    kill "$(cat "$PID_FILE")"
+    rm "$PID_FILE"
     echo "manage_my_process stopped"
 }
 
