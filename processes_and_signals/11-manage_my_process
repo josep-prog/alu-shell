@@ -1,71 +1,21 @@
-#!/bin/bash
- 
-PID_FILE="/var/run/my_process.pid"
+#!/usr/bin/env bash
+# The init script manages another process. It can start, stop, or restart the process, and displays messages and creates/deletes a PID file.
 
-start() {
-    if [ -f "$PID_FILE" ]; then
-        echo "manage_my_process started"
-        return 1
-    fi
-    nohup bash manage_my_process & echo $! > "$PID_FILE"
-    echo "manage_my_process is already running."
-}
-
- 
- 
- 
-stop() { 
-    
-    # Read PID from the file
-    PID=$(cat "$PID_FILE")
-    if kill -9 "$PID" > /dev/null 2>&1; then
-        rm -f "$PID_FILE"
-        echo "manage_my_process stopped" 
-    else
-        echo "Failed to stop manage_my_process with PID $PID"
-    fi
-}
-restart() {
-    if [ -f "$PID_FILE" ]; then
-        echo "Stopping manage_my_process..."
-        PID=$(cat "$PID_FILE")
-        kill "$PID" 2>/dev/null
-
-        # Wait a moment for the process to stop gracefully
-        sleep 1
-
-        # Check if the process is still running
-        if ps -p "$PID" > /dev/null; then
-            echo "Process did not stop, force killing..."
-            kill -9 "$PID"
-        fi
-
-        rm "$PID_FILE"
-        echo "manage_my_process stopped."
-
-	break
-
-	else
-        echo "No PID file found. Process not running."
-    fi
-
-    start
-}
-
-
-  
-  
-case "$1" in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    restart)
-        restart
-        ;;
-    *)
-        echo "Usage: manage_my_process {start|stop|restart}"
-        ;;
-esac
+if [ "$1" == "start" ]; then
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+elif [ "$1" == "stop" ]; then
+    pid=$(cat /var/run/my_process.pid)
+    kill "$pid"
+    rm /var/run/my_process.pid
+    echo "manage_my_process stopped"
+elif [ "$1" == "restart" ]; then
+    pid=$(cat /var/run/my_process.pid)
+    kill "$pid"
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+else
+    echo "Usage: manage_my_process {start|stop|restart}"
+fi
